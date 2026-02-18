@@ -1,0 +1,82 @@
+[
+  {
+    "id": "SAMPLE-001",
+    "content": "URGENT: Your account has been compromised. Click the link immediately to verify your identity and avoid permanent suspension.",
+    "label": "phishing",
+    "risk_level": "HIGH",
+    "expected_score_min": 60,
+    "source": "email"
+  },
+  {
+    "id": "SAMPLE-002",
+    "content": "The quarterly results look promising. Looking forward to the team discussion tomorrow morning.",
+    "label": "benign",
+    "risk_level": "SAFE",
+    "expected_score_min": 0,
+    "source": "chat"
+  },
+  {
+    "id": "SAMPLE-003",
+    "content": "New zero-day exploit bypasses Windows Defender. Payload tested on financial sector targets. Available for deployment.",
+    "label": "cybersecurity_threat",
+    "risk_level": "CRITICAL",
+    "expected_score_min": 80,
+    "source": "social_media"
+  },
+  {
+    "id": "SAMPLE-004",
+    "content": "They won't get away with this. I know where they work. I have what I need to make them regret it.",
+    "label": "violence_threat",
+    "risk_level": "CRITICAL",
+    "expected_score_min": 85,
+    "source": "text_message"
+  },
+  {
+    "id": "SAMPLE-005",
+    "content": "BREAKING: Doctors HIDING the cure for cancer! Government suppressing this life-saving treatment — SHARE before it's deleted!",
+    "label": "misinformation",
+    "risk_level": "MEDIUM",
+    "expected_score_min": 40,
+    "source": "social_media"
+  },
+  {
+    "id": "SAMPLE-006",
+    "content": "The package will be at the warehouse tonight. Coordinates sent separately. No records, use the encrypted channel.",
+    "label": "suspicious_activity",
+    "risk_level": "HIGH",
+    "expected_score_min": 55,
+    "source": "chat"
+  },
+  {
+    "id": "SAMPLE-007",
+    "content": "Can you send me the presentation slides before the 3pm meeting? Thanks!",
+    "label": "benign",
+    "risk_level": "SAFE",
+    "expected_score_min": 0,
+    "source": "email"
+  },
+  {
+    "id": "SAMPLE-008",
+    "content": "Database credentials dump from financial institution. 2.3M records. Contact for price.",
+    "label": "data_exfiltration",
+    "risk_level": "CRITICAL",
+    "expected_score_min": 88,
+    "source": "darkweb"
+  },
+  {
+    "id": "SAMPLE-009",
+    "content": "I hate everything about this group of people. They're inferior and don't deserve to be here.",
+    "label": "hate_speech",
+    "risk_level": "HIGH",
+    "expected_score_min": 65,
+    "source": "social_media"
+  },
+  {
+    "id": "SAMPLE-010",
+    "content": "Great coffee this morning! Ready for a productive week ahead.",
+    "label": "benign",
+    "risk_level": "SAFE",
+    "expected_score_min": 0,
+    "source": "social_media"
+  }
+]
