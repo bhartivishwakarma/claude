@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login & Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050c10;
+  font-family: 'Exo 2', sans-serif;
+}
+
+/* Glowing border */
+.glow-wrap {
+  padding: 2px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #00d4d4, #005f70, #00d4d4);
+  animation: glow 2.5s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { box-shadow: 0 0 18px #00c0c055, 0 0 50px #00909025; }
+  to   { box-shadow: 0 0 35px #00e0e095, 0 0 90px #00b0b055; }
+}
+
+/* Card container */
+.card {
+  position: relative;
+  width: 860px;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #071318;
+}
+
+/* ── PANELS ── */
+.panel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #071318;
+}
+#login    { z-index: 2; }
+#register { z-index: 1; }
+
+/* ── TEAL SHAPES ──
+   LOGIN:  teal parallelogram on RIGHT
+           diagonal cut: top at 42%, bottom at 28%
+           dark triangle at bottom-right corner
+
+   REGISTER: teal triangle/wedge on LEFT  
+             top from 0% to 38%, bottom from 0% to 27%
+             points rightward into dark area
+*/
+.teal {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #0c6272 0%, #0f7585 35%, #0a5565 70%, #083f4e 100%);
+}
+
+#login .teal {
+  clip-path: polygon(42% 0%, 100% 0%, 100% 68%, 28% 100%);
+}
+
+#register .teal {
+  clip-path: polygon(0% 0%, 38% 0%, 27% 100%, 0% 100%);
+}
+
+/* ── WELCOME TEXT ── */
+.welcome {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #c5f2f2;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-align: center;
+  text-shadow: 0 0 28px #00cccc70;
+  z-index: 2;
+  pointer-events: none;
+}
+#login .welcome    { right: 6%; }
+#register .welcome { left: 2%; width: 32%; }
+
+/* ── FORM AREAS ── */
+.form-area {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 2;
+}
+#login .form-area    { left: 0;   width: 46%; padding: 0 52px; }
+#register .form-area { right: 0;  width: 58%; padding: 0 52px; }
+
+h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #d5f5f5;
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+}
+
+.field {
+  position: relative;
+  margin-bottom: 20px;
+}
+.field input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid rgba(0,185,185,0.35);
+  padding: 8px 32px 8px 0;
+  color: #b5e8e8;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.field input::placeholder { color: rgba(115,190,190,0.5); }
+.field input:focus { border-bottom-color: #00d0d0bb; }
+.field-icon {
+  position: absolute;
+  right: 2px; top: 50%;
+  transform: translateY(-50%);
+  color: rgba(0,185,185,0.5);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00baba, #007f7f);
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  box-shadow: 0 4px 22px #00a8a855;
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+.btn:hover  { box-shadow: 0 6px 32px #00d0d075; transform: translateY(-1px); }
+.btn:active { transform: none; }
+
+.hint {
+  margin-top: 15px;
+  text-align: center;
+  color: rgba(125,195,195,0.58);
+  font-size: 0.86rem;
+}
+.hint a {
+  color: #00cccc;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+.hint a:hover { color: #80ffff; }
+
+/* ══════════════════════════════════════════════════════
+   SWEEP OVERLAY — the KEY animation
+
+   The teal block slides as ONE piece across the card.
+   It's a skewed rectangle that translates left→right or right→left.
+   
+   Skew angle matches the diagonal in the video (~20deg).
+   Width is 130% to account for the skew overhang.
+   
+   Forward  (Login→Register): slides LEFT  (from right → left → off left)
+   Reverse  (Register→Login): slides RIGHT (from left → right → off right)
+   
+   Two phases each:
+     IN:  slides from off-screen to covering the card center
+     OUT: continues sliding off the other side
+   
+   Using transform: translateX() so it's ONE smooth direction,
+   ONE edge sweeping — matches exactly what the video shows.
+══════════════════════════════════════════════════════ */
+.sweep {
+  position: absolute;
+  top: -5%;
+  height: 110%;
+  width: 140%;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(145deg, #0d6575 0%, #107888 30%, #0a5868 65%, #084252 100%);
+  /* Skew matches the diagonal angle seen in the video */
+  transform: skewX(-18deg) translateX(130%);
+  will-change: transform;
+}
+
+/* FORWARD: slides from RIGHT side across to LEFT and exits left */
+.sweep.fwd-in {
+  animation: fwdIn 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes fwdIn {
+  from { transform: skewX(-18deg) translateX(130%);  }
+  to   { transform: skewX(-18deg) translateX(-10%);  }
+}
+
+.sweep.fwd-out {
+  animation: fwdOut 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes fwdOut {
+  from { transform: skewX(-18deg) translateX(-10%);  }
+  to   { transform: skewX(-18deg) translateX(-140%); }
+}
+
+/* REVERSE: slides from LEFT side across to RIGHT and exits right */
+.sweep.rev-in {
+  animation: revIn 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes revIn {
+  from { transform: skewX(-18deg) translateX(-140%); }
+  to   { transform: skewX(-18deg) translateX(-10%);  }
+}
+
+.sweep.rev-out {
+  animation: revOut 0.65s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes revOut {
+  from { transform: skewX(-18deg) translateX(-10%);  }
+  to   { transform: skewX(-18deg) translateX(130%);  }
+}
+</style>
+</head>
+<body>
+
+<div class="glow-wrap">
+<div class="card">
+
+  <!-- LOGIN -->
+  <div class="panel" id="login">
+    <div class="teal"></div>
+    <div class="form-area">
+      <h2>Login</h2>
+      <div class="field">
+        <input type="text" placeholder="Username">
+        <span class="field-icon">&#128100;</span>
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Password">
+        <span class="field-icon">&#128274;</span>
+      </div>
+      <button class="btn">Login</button>
+      <p class="hint">Don't have an account? <a id="goReg">Sign Up</a></p>
+    </div>
+    <div class="welcome">WELCOME<br>BACK!</div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="panel" id="register">
+    <div class="teal"></div>
+    <div class="welcome">WELCOME!</div>
+    <div class="form-area">
+      <h2>Register</h2>
+      <div class="field">
+        <input type="text" placeholder="Username">
+        <span class="field-icon">&#128100;</span>
+      </div>
+      <div class="field">
+        <input type="email" placeholder="Email">
+        <span class="field-icon">&#9993;</span>
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Password">
+        <span class="field-icon">&#128274;</span>
+      </div>
+      <button class="btn">Register</button>
+      <p class="hint">Already have an account? <a id="goLog">Sign In</a></p>
+    </div>
+  </div>
+
+  <!-- SWEEP -->
+  <div class="sweep" id="sweep"></div>
+
+</div>
+</div>
+
+<script>
+const loginEl = document.getElementById('login');
+const regEl   = document.getElementById('register');
+const sweep   = document.getElementById('sweep');
+let onLogin = true, busy = false;
+
+function toggle() {
+  if (busy) return;
+  busy = true;
+
+  const inCls  = onLogin ? 'fwd-in'  : 'rev-in';
+  const outCls = onLogin ? 'fwd-out' : 'rev-out';
+
+  // Phase 1: sweep slides IN covering the card
+  sweep.className = 'sweep ' + inCls;
+
+  setTimeout(() => {
+    // Swap panels while hidden under teal
+    if (onLogin) {
+      loginEl.style.zIndex = '1';
+      regEl.style.zIndex   = '2';
+    } else {
+      regEl.style.zIndex   = '1';
+      loginEl.style.zIndex = '2';
+    }
+    onLogin = !onLogin;
+
+    // Phase 2: sweep slides OUT revealing new panel
+    sweep.className = 'sweep ' + outCls;
+
+    setTimeout(() => {
+      sweep.className = 'sweep';
+      busy = false;
+    }, 660);
+  }, 620);
+}
+
+document.getElementById('goReg').addEventListener('click', toggle);
+document.getElementById('goLog').addEventListener('click', toggle);
+</script>
+</body>
+</html>
