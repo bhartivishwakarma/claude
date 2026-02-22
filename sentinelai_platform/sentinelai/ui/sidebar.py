@@ -58,9 +58,16 @@ def render_sidebar():
         pages = [
             "🏠 Home Dashboard",
             "📡 Live Monitoring",
-            "🔬 Analysis Studio",
-            "🗺️ Threat Intelligence",
+            "🧪 Analysis Studio",
+            "📖 Threat Intelligence",
             "📊 Reports & Insights",
+            "🛡 Phishing Detection",
+            "🎥 Security Awareness",
+            "📰 Cyber News",
+            "🔑 Password Analyzer",
+            "🚨 Fraud Alerts",
+            "🧠 Threat Analysis",
+            "⚙️ Settings"
         ]
 
         if "current_page" not in st.session_state:
